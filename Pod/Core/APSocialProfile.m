@@ -60,4 +60,25 @@
     }
 }
 
+- (NSString *)stringFromSocialNetworkType:(APSocialNetworkType)type
+{
+	switch (type) {
+		case APSocialNetworkFacebook:
+			return @"facebook";
+		case APSocialNetworkLinkedIn:
+			return @"linkedin";
+		case APSocialNetworkTwitter:
+			return @"twiter";
+		default:
+		case APSocialNetworkUnknown:
+			return @"unknown";
+	}
+}
+
+
+- (NSString *)description
+{
+	return [NSString stringWithFormat:@"%@: %@ (%@)", [self stringFromSocialNetworkType:self.socialNetwork], self.username, self.userIdentifier];
+}
+
 @end
