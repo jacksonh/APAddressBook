@@ -100,6 +100,15 @@
         {
             _note = [self stringProperty:kABPersonNoteProperty fromRecord:recordRef];
         }
+
+			NSMutableArray *relations = [[NSMutableArray alloc] init];
+			NSArray *array = [self labelValueArrayProperty:kABPersonRelatedNamesProperty fromRecord:recordRef];
+			for (NSDictionary *dictionary in array)
+			{
+				NSLog (@"relation:  %@", dictionary);
+				[relations addObject:dictionary];
+			}
+			_relations = [relations copy];
     }
     return self;
 }
@@ -126,6 +135,23 @@
         }
     }];
     return array.copy;
+}
+
+- (NSArray *)labelValueArrayProperty:(ABPropertyID)property fromRecord:(ABRecordRef)recordRef
+{
+	NSMutableArray *array = [[NSMutableArray alloc] init];
+	[self enumerateMultiValueOfProperty:property fromRecord:recordRef
+							  withBlock:^(ABMultiValueRef multiValue, NSUInteger index)
+	 {
+		 CFTypeRef value = ABMultiValueCopyValueAtIndex(multiValue, index);
+		 CFTypeRef label = ABMultiValueCopyLabelAtIndex(multiValue, index);
+		 NSString *valueString = (__bridge_transfer NSString *)value;
+		 NSString *labelString = (__bridge_transfer NSString *)label;
+		 if (valueString && labelString) {
+			 [array addObject:@{ labelString: valueString }];
+		 }
+	 }];
+	return array.copy;
 }
 
 
