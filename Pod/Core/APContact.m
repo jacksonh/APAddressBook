@@ -219,7 +219,10 @@
     {
         block(multiValue, i);
     }
-    CFRelease(multiValue);
+    if (multiValue)
+    {
+        CFRelease(multiValue);
+    }
 }
 
 @end
